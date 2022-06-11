@@ -63,6 +63,7 @@ flutter:
     - assets/icons/
     - assets/dice_images/
     - assets/coin_images/
+    - assets/food_images.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
