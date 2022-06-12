@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'dart:math';
 
 class Wheel extends StatefulWidget {
   const Wheel({Key? key}) : super(key: key);
@@ -10,6 +13,7 @@ class Wheel extends StatefulWidget {
 
 class _WheelState extends State<Wheel> {
   late TextEditingController controller;
+  StreamController<int> selected = StreamController<int>();
 
   final fortuneItem = <FortuneItem>[
     const FortuneItem(child: Text('Pass')),
@@ -55,7 +59,21 @@ class _WheelState extends State<Wheel> {
     return Center(
       child: Scaffold(
         body: GestureDetector(
-          child: FortuneWheel(items: fortuneItem),
+          onTap: () {
+            setState(() {
+              selected.add(Random().nextInt(fortuneItem.length));
+            });
+          },
+          child: SafeArea(
+            child: FortuneWheel(
+              items: fortuneItem,
+              selected: selected.stream,
+              animateFirst: false,
+              onAnimationEnd: () {
+                selected.stream.drain();
+              },
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () async {

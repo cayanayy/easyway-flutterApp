@@ -1,7 +1,7 @@
 import 'package:easyway/screens/dice.dart';
 import 'package:easyway/screens/wheel.dart';
 import 'package:easyway/screens/flip_coin.dart';
-import 'package:easyway/screens/left_or_right.dart';
+import 'package:easyway/screens/choose_food.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -28,11 +28,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         controller: pageController,
-        children: [
+        children: const [
           Dice(),
           Wheel(),
           FlipCoin(),
-          LeftOrRight(),
+          ChooseFood(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
