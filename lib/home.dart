@@ -2,6 +2,7 @@ import 'package:easyway/screens/dice.dart';
 import 'package:easyway/screens/wheel.dart';
 import 'package:easyway/screens/flip_coin.dart';
 import 'package:easyway/screens/choose_food.dart';
+import 'package:easyway/screens/random_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -33,6 +34,7 @@ class _HomeState extends State<Home> {
           Wheel(),
           FlipCoin(),
           ChooseFood(),
+          RandomNumber(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -49,6 +51,9 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
               icon: SvgPicture.asset('assets/icons/leftright.svg', width: 20),
               label: 'Left or Right'),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/number.svg', width: 20),
+              label: 'Random Number'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
