@@ -31,7 +31,7 @@ class _DiceState extends State<Dice> {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );
