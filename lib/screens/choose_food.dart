@@ -97,7 +97,7 @@ class _ChooseFoodState extends State<ChooseFood> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    showSelectedFoods();
+                    _selectedFoods.isNotEmpty ? showSelectedFoods() : () {};
                   },
                   child: const Icon(Icons.remove_red_eye, color: Colors.white),
                   style: ElevatedButton.styleFrom(
@@ -111,7 +111,7 @@ class _ChooseFoodState extends State<ChooseFood> {
         });
   }
 
-  Widget showSelectedFoodPage() {
+  Widget selectedFoodsPage() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -153,7 +153,7 @@ class _ChooseFoodState extends State<ChooseFood> {
     return PageView(
       scrollDirection: Axis.vertical,
       controller: pageController,
-      children: [foodSelectingPage(), showSelectedFoodPage()],
+      children: [foodSelectingPage(), selectedFoodsPage()],
     );
   }
 }
