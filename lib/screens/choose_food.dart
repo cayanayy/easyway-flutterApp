@@ -12,8 +12,10 @@ class ChooseFood extends StatefulWidget {
 class _ChooseFoodState extends State<ChooseFood> {
   List _foods = [];
   Future<List>? _foodsFuture;
-  List _selectedFoods = [];
+  final List _selectedFoods = [];
   int currentIndex = 0;
+  int _selectedPageIndex = 1;
+  PageController pageController = PageController();
 
   Future<List> readJson() async {
     final String response =
@@ -28,7 +30,12 @@ class _ChooseFoodState extends State<ChooseFood> {
     super.initState();
   }
 
-  void showSelectedFoods() {}
+  void showSelectedFoods() {
+    setState(() {
+      _selectedPageIndex = 2;
+    });
+    pageController.jumpToPage(2);
+  }
 
   void showNextFood() {
     if (currentIndex < _foods.length - 1) {
@@ -39,8 +46,7 @@ class _ChooseFoodState extends State<ChooseFood> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget foodSelectingPage() {
     return FutureBuilder(
         future: _foodsFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -57,7 +63,7 @@ class _ChooseFoodState extends State<ChooseFood> {
                 height: 300,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Colors.transparent,
                     image: DecorationImage(
                         image: NetworkImage(_foods[currentIndex]["url"]),
                         fit: BoxFit.fill)),
@@ -66,45 +72,88 @@ class _ChooseFoodState extends State<ChooseFood> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: showNextFood,
-                    child:
-                        const Icon(Icons.cancel_rounded, color: Colors.white),
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(20),
-                      primary: Colors.black, // <-- Button color
-                      onPrimary: Colors.red, // <-- Splash color
-                    ),
-                  ),
+                      onPressed: showNextFood,
+                      child:
+                          const Icon(Icons.cancel_rounded, color: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20),
+                        primary: Colors.black,
+                        onPrimary: Colors.red,
+                      )),
                   ElevatedButton(
-                    onPressed: () {
-                      _selectedFoods.add(_foods[currentIndex]["url"]);
-                      showNextFood();
-                    },
-                    child: const Icon(Icons.check, color: Colors.white),
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(20),
-                      primary: Colors.black, // <-- Button color
-                      onPrimary: Colors.red, // <-- Splash color
-                    ),
-                  ),
+                      onPressed: () {
+                        _selectedFoods.add(_foods[currentIndex]["url"]);
+                        showNextFood();
+                      },
+                      child: const Icon(Icons.check, color: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(20),
+                        primary: Colors.black,
+                        onPrimary: Colors.red,
+                      )),
                 ],
               ),
               ElevatedButton(
-                onPressed: () {
-                  showSelectedFoods();
-                },
-                child: const Icon(Icons.remove_red_eye, color: Colors.white),
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  primary: Colors.black, // <-- Button color
-                  onPrimary: Colors.red, // <-- Splash color
-                ),
-              )
+                  onPressed: () {
+                    showSelectedFoods();
+                  },
+                  child: const Icon(Icons.remove_red_eye, color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(20),
+                    primary: Colors.black,
+                    onPrimary: Colors.red,
+                  )),
             ],
           );
         });
+  }
+
+  Widget showSelectedFoodPage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 40, 0, 20),
+            child: Text("You choosed these foods."),
+          ),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: _selectedFoods.length,
+              itemBuilder: (context, position) {
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      width: 250,
+                      height: 250,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Colors.transparent,
+                          image: DecorationImage(
+                              image: NetworkImage(_selectedFoods[position]),
+                              fit: BoxFit.fill)),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView(
+      scrollDirection: Axis.vertical,
+      controller: pageController,
+      children: [foodSelectingPage(), showSelectedFoodPage()],
+    );
   }
 }
