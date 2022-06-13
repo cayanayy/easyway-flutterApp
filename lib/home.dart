@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
               icon: SvgPicture.asset('assets/icons/leftright.svg', width: 20),
               label: 'Left or Right'),
           BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/number.svg', width: 20),
+              icon: Image.asset('assets/icons/number.png', width: 20),
               label: 'Random Number'),
         ],
         currentIndex: _selectedIndex,
