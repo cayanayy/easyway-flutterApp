@@ -8,8 +8,26 @@ class Dice extends StatefulWidget {
   State<Dice> createState() => _DiceState();
 }
 
-class _DiceState extends State<Dice> {
+class _DiceState extends State<Dice> with TickerProviderStateMixin {
   int diceNo = 1;
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +38,20 @@ class _DiceState extends State<Dice> {
             child: Padding(
               padding: const EdgeInsets.all(50.0),
               child: TextButton(
-                child: Image.asset('assets/dice_images/dice$diceNo.png'),
+                child: RotationTransition(
+                  child: Image.asset('assets/dice_images/dice$diceNo.png'),
+                  turns: animation,
+                ),
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
-                onPressed: () => {
-                  setState(
-                    () => diceNo = Random().nextInt(6) + 1,
-                  )
+                onPressed: () {
+                  animationController.reset();
+                  animationController.forward().whenComplete(() {
+                    setState(() {
+                      diceNo = Random().nextInt(6) + 1;
+                    });
+                  });
                 },
               ),
             ),

@@ -58,8 +58,14 @@ class _RandomNumberState extends State<RandomNumber> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: AlertDialog(
-                title: const Center(child: Text('Random number is:')),
-                content: Center(child: Text(randomNumber.toString())),
+                title: const Center(
+                    child: Text(
+                  'Random number is:',
+                  style: TextStyle(color: Colors.black),
+                )),
+                content: Center(
+                    child: Text(randomNumber.toString(),
+                        style: const TextStyle(color: Colors.white))),
               ),
             ),
           ],

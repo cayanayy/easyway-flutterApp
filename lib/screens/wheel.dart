@@ -13,10 +13,24 @@ class Wheel extends StatefulWidget {
 class _WheelState extends State<Wheel> {
   late TextEditingController controller;
   StreamController<int> selected = StreamController<int>.broadcast();
+  int currentColor = 0;
 
   final fortuneItem = <FortuneItem>[
-    const FortuneItem(child: Text('Pass')),
-    const FortuneItem(child: Text('Pass')),
+    const FortuneItem(
+        child: Text('Go to dice'),
+        style: FortuneItemStyle(color: Colors.black, borderWidth: 4)),
+    const FortuneItem(
+        child: Text('Pass'),
+        style: FortuneItemStyle(color: Colors.grey, borderWidth: 4)),
+  ];
+
+  final fortuneItemColors = <Color>[
+    Colors.red,
+    Colors.yellow,
+    Colors.blue,
+    Colors.green,
+    Colors.purple,
+    Colors.pink
   ];
 
   @override
@@ -71,10 +85,18 @@ class _WheelState extends State<Wheel> {
               animateFirst: false,
             ))),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
             onPressed: () async {
               final newFortuneItem = await openDialog();
+              if (currentColor >= fortuneItemColors.length) currentColor = 0;
+
               setState(() {
-                fortuneItem.add(FortuneItem(child: Text('$newFortuneItem')));
+                fortuneItem.add(FortuneItem(
+                    child: Text('$newFortuneItem'),
+                    style: FortuneItemStyle(
+                        color: fortuneItemColors[currentColor++],
+                        borderWidth: 4)));
               });
             },
             child: const Icon(Icons.add)),
